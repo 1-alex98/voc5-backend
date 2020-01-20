@@ -1,0 +1,57 @@
+mixin tableCall(title, type, path, description, bodyRequest, bodyResponse, query, header)
+    div.card.m-3
+        div.card-body
+            table.table
+                if title
+                    h2=title
+                thead
+                    th item
+                    th value
+                tbody
+                    tr
+                        td type
+                        td=type
+                    tr
+                        td path
+                        td=path
+                    tr
+                        td description
+                        td=description
+                    if bodyRequest
+                        tr
+                            td body request
+                            td=bodyRequest
+                    if bodyResponse
+                        tr
+                            td body response
+                            td=bodyResponse
+                    if query
+                        tr
+                            td query
+                            td=query
+                    if header
+                        tr
+                            td header
+                            td=header
+
+html(lang='en')
+    head
+        title Docs
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/4.4.1/jquery.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js")
+    body
+        div.container
+            div.card.bg-light.text-dark.m-3
+                div.card-body
+                    h1 See the docs
+                    p A description of rest calls u can do against this api.
+            +tableCall("What the items mean","The Rest request type, something like POST or GET.","Says how to call the method e.g. /voc.", "Description of the call", "What the body of the request looks like" , "What the body of the response looks like", "If there are any query parameters. That are those that are put at the end of an URL e.g. /voc?id=3", "Headers that must be set, btw. the headers email and password need to be set for all calls to /voc*")
+            +tableCall(null,"GET","/", "Returns this docs page")
+            +tableCall(null,"GET","/register", "Creates a new user and returns according status code depending on if user name already existed and if the register was successful.", "An object with email and password as json. Like that: {\"email\": \"alex@example.de\", \"password\": \"12345678\"}" , null, null)
+            +tableCall(null,"GET","/login", "Return a 200 status code if login is valid and 401 if it is not.", null, null , null, "email header needs to be set to email and password header to password, all further calls need to same headers")
+            +tableCall(null,"GET","/voc", "Returns all vocabulary", null, "An array of Vocabulary objects [{\"id\":2,\"answer\":\"apple\",\"question\":\"apfel\",\"language\":\"EN\"},{\"id\":3,\"answer\":\"my\",\"question\":\"mein\",\"language\":\"EN\"},{\"id\":4,\"answer\":\"hello\",\"question\":\"hallo\",\"language\":\"EN\"}]" , null, null)
+            +tableCall(null,"GET","/voc/random", "Returns a random vocabulary", null, "A vocabulary objects {\"id\":2,\"answer\":\"apple\",\"question\":\"apfel\",\"language\":\"EN\"}" , null, null)
+            +tableCall(null,"PATCH","/voc/:id", "Updates a vocabulary", "A vocabulary objects {\"id\":2,\"answer\":\"apple\",\"question\":\"apfel\",\"language\":\"EN\"}, the according object with that id is updated.", null , null, null)
+            +tableCall(null,"DELETE","/voc/:id", "Deleted a vocabulary with the given id", null , null , null, null)
+            +tableCall(null,"POST","/voc", "Create a new vocabulary",  "A vocabulary objects {\"answer\":\"apple\",\"question\":\"apfel\",\"language\":\"EN\"}, the according object is inserted.", null, null , null, null)
