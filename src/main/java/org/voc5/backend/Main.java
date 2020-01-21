@@ -34,14 +34,15 @@ public class Main {
         post("/voc", Main::createVocabulary);
         delete("/voc/:id", Main::deleteVocabularyWithId);
         after((request, response) -> {
-            response.header("Content-Type", "application/json");
             response.header("Access-Control-Allow-Origin", "*");
         });
+        staticFiles.location("/static");
     }
 
     private static Object createVocabulary(Request request, Response response) {
         int userId = checkForLogin(request);
         Vocabulary vocabulary = gson.fromJson(request.body(), Vocabulary.class);
+        response.header("Content-Type", "application/json");
         return JDBCWrapper.getInstance().createVoc(userId, vocabulary);
     }
 
@@ -49,10 +50,12 @@ public class Main {
         int userId = checkForLogin(request);
         Vocabulary vocabulary = gson.fromJson(request.body(), Vocabulary.class);
         JDBCWrapper.getInstance().patchVocabulary(userId, vocabulary);
+        response.header("Content-Type", "application/json");
         return "patched";
     }
 
     private static Object login(Request request, Response response) {
+        response.header("Content-Type", "application/json");
         if (checkForLogin(request) != -1) {
             return "Logged in";
         }
@@ -60,10 +63,12 @@ public class Main {
     }
 
     private static void checkForLogin(Request request, Response response) {
+        response.header("Content-Type", "application/json");
         checkForLogin(request);
     }
 
     private static Object register(Request request, Response response) {
+        response.header("Content-Type", "application/json");
         String body = request.body();
         RegisterBody registerBody = gson.fromJson(body, RegisterBody.class);
         String passwordHash = BCrypt.withDefaults().hashToString(12, registerBody.getPassword().toCharArray());
@@ -91,6 +96,7 @@ public class Main {
     }
 
     private static Object deleteVocabularyWithId(Request req, Response res) {
+        res.header("Content-Type", "application/json");
         int userId = checkForLogin(req);
         int vocId;
         try {
@@ -104,11 +110,13 @@ public class Main {
     }
 
     private static Object getRandomVocabulary(Request req, Response res) {
+        res.header("Content-Type", "application/json");
         int userId = checkForLogin(req);
         return JDBCWrapper.getInstance().getRandomVoc(userId);
     }
 
     private static Object getAllVocabulary(Request req, Response res) {
+        res.header("Content-Type", "application/json");
         int userId = checkForLogin(req);
         return JDBCWrapper.getInstance().getAllVocabulary(userId);
     }
