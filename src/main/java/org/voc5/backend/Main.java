@@ -33,6 +33,10 @@ public class Main {
         patch("/voc/:id", Main::patchVocabularyWithId);
         post("/voc", Main::createVocabulary);
         delete("/voc/:id", Main::deleteVocabularyWithId);
+        after((request, response) -> {
+            response.header("Content-Type", "application/json");
+            response.header("Access-Control-Allow-Origin", "*");
+        });
     }
 
     private static Object createVocabulary(Request request, Response response) {

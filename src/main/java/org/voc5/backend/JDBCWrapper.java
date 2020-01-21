@@ -93,10 +93,13 @@ public class JDBCWrapper {
 
     public Vocabulary getRandomVoc(int userId) {
         try {
-            PreparedStatement preparedStatement = dbConnection.prepareStatement("Select * from vocabulary where owner = ? order by random() limit 1;;", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement preparedStatement = dbConnection.prepareStatement("Select * from vocabulary where owner = ? order by random() limit 1;", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.first();
+            boolean first = resultSet.first();
+            if (!first) {
+                return null;
+            }
             return new Vocabulary(resultSet.getInt("id"), resultSet.getString("answer"), resultSet.getString("question"), resultSet.getString("language"), null);
         } catch (SQLException e) {
             throw new RuntimeException(e);
