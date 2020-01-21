@@ -12,6 +12,7 @@ public class JDBCWrapper {
 
     private JDBCWrapper() {
         String postgresIp = System.getenv("POSTGRES_IP");
+        String postgresPassword = System.getenv("POSTGRES_PASSWORD");
         String postgresPort = System.getenv("POSTGRES_PORT");
         String postgresDb = System.getenv("POSTGRES_DB");
         String postgresSchema = System.getenv("POSTGRES_SCHEMA");
@@ -19,13 +20,14 @@ public class JDBCWrapper {
         postgresPort = postgresPort == null ? "5432" : postgresPort;
         postgresDb = postgresDb == null ? "postgres" : postgresDb;
         postgresSchema = postgresSchema == null ? "public" : postgresSchema;
+        postgresPassword = postgresPassword == null ? "postgres" : postgresPassword;
         // Create a URL that identifies database
         String url = "jdbc:postgresql://" + postgresIp + ":" + postgresPort + "/" + postgresDb + "?currentSchema=" + postgresSchema;
 
         // Now attempt to create a database connection
         try {
             dbConnection =
-                    DriverManager.getConnection(url, "postgres", "docker");
+                    DriverManager.getConnection(url, "postgres", postgresPassword);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);

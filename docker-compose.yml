@@ -26,7 +26,7 @@ services:
     build: .
     ports:
       - "0.0.0.0:4040:4040"
-    env_file: ./config/voc5-backend/vo5-backend.env
+    env_file: config/voc5-backend/voc5-backend.env
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:4040/", "||" ,"exit 1"]
       timeout: 10s
