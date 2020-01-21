@@ -1,0 +1,39 @@
+version: "2.4"
+
+services:
+  #
+  # core database
+  #
+  core-db:
+    container_name: core-db
+    image: postgres:10.6-alpine
+    networks:
+      myNet:
+        aliases:
+          - "core-db"
+    env_file: ./config/core-db/core-db.env
+    ports:
+      - "127.0.01:5432:5432"
+    volumes:
+      - ./data/core-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      timeout: 3s
+      retries: 10
+
+  backend:
+    container_name: backend
+    build: .
+    ports:
+      - "0.0.0.0:4040:4040"
+    env_file: ./config/voc5-backend/vo5-backend.env
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:4040/", "||" ,"exit 1"]
+      timeout: 10s
+      retries: 3
+    networks:
+      - myNet
+
+networks:
+  myNet:
+    driver: bridge

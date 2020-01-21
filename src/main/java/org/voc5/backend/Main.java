@@ -18,6 +18,10 @@ public class Main {
     private static Gson gson = new Gson();
 
     public static void main(String[] args) {
+        String port = System.getenv("VOC_PORT");
+        port = port == null ? "8080" : port;
+        port(Integer.parseInt(port));
+
         JDBCWrapper.getInstance().connect();
         get("/login", Main::login);
         get("/", (rq, rs) -> new ModelAndView(new HashMap<>(), "docs"), new JadeTemplateEngine());
