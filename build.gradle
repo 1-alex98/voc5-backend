@@ -21,7 +21,9 @@ task customFatJar(type: Jar) {
         attributes 'Main-Class': 'org.voc5.backend.Main'
     }
     baseName = 'all-in-one-jar'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
     with jar
 }
 
