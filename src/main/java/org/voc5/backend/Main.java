@@ -18,6 +18,7 @@ public class Main {
     private static Gson gson = new Gson();
 
     public static void main(String[] args) {
+        staticFiles.location("/static");
         String port = System.getenv("VOC_PORT");
         port = port == null ? "8080" : port;
         port(Integer.parseInt(port));
@@ -36,7 +37,6 @@ public class Main {
         after((request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
         });
-        staticFiles.location("/static");
     }
 
     private static Object createVocabulary(Request request, Response response) {
