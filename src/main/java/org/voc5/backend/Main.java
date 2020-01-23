@@ -49,6 +49,7 @@ public class Main {
     private static Object patchVocabularyWithId(Request request, Response response) {
         int userId = checkForLogin(request);
         Vocabulary vocabulary = gson.fromJson(request.body(), Vocabulary.class);
+        vocabulary.setId(Integer.valueOf(request.params("id")));
         JDBCWrapper.getInstance().patchVocabulary(userId, vocabulary);
         response.header("Content-Type", "application/json");
         return "patched";

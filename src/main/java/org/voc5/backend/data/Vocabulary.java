@@ -1,11 +1,15 @@
 package org.voc5.backend.data;
 
 public class Vocabulary {
-    private final Integer id;
-    private final String answer;
-    private final String question;
-    private final String language;
-    private final Integer phase;
+    private Integer id;
+    private String answer;
+    private String question;
+    private String language;
+    private Integer phase;
+
+    public Vocabulary() {
+
+    }
 
     public Vocabulary(int id, String answer, String question, String language, Integer phase) {
         this.id = id;
@@ -33,5 +37,25 @@ public class Vocabulary {
 
     public Integer getPhase() {
         return phase;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setPhase(Integer phase) {
+        this.phase = phase;
     }
 }
