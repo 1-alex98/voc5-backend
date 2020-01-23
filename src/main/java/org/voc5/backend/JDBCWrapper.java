@@ -82,7 +82,7 @@ public class JDBCWrapper {
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Vocabulary> vocs = new ArrayList<>();
             while (resultSet.next()) {
-                Vocabulary vocabulary = new Vocabulary(resultSet.getInt("id"), resultSet.getString("answer"), resultSet.getString("question"), resultSet.getString("language"), null);
+                Vocabulary vocabulary = new Vocabulary(resultSet.getInt("id"), resultSet.getString("answer"), resultSet.getString("question"), resultSet.getString("language"), resultSet.getInt("phase"));
                 vocs.add(vocabulary);
             }
             return vocs;
@@ -100,7 +100,7 @@ public class JDBCWrapper {
             if (!first) {
                 return null;
             }
-            return new Vocabulary(resultSet.getInt("id"), resultSet.getString("answer"), resultSet.getString("question"), resultSet.getString("language"), null);
+            return new Vocabulary(resultSet.getInt("id"), resultSet.getString("answer"), resultSet.getString("question"), resultSet.getString("language"), resultSet.getInt("phase"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
