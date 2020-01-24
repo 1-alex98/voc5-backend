@@ -5,10 +5,12 @@ import org.voc5.backend.data.Vocabulary;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class JDBCWrapper {
     private static JDBCWrapper JDBC_WRAPPER = new JDBCWrapper();
     private Connection dbConnection;
+    public Random random = new Random();
 
     private JDBCWrapper() {
         String postgresIp = System.getenv("POSTGRES_IP");
@@ -93,14 +95,16 @@ public class JDBCWrapper {
 
     public Vocabulary getRandomVoc(int userId) {
         try {
-            PreparedStatement preparedStatement = dbConnection.prepareStatement("Select * from vocabulary where owner = ? order by random() limit 1;", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement preparedStatement = dbConnection.prepareStatement("Select * from vocabulary where owner = ? and phase < 5 order by random() limit 1;", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            boolean first = resultSet.first();
-            if (!first) {
-                return null;
+
+            ArrayList<Vocabulary> vocs = new ArrayList<>();
+            while (resultSet.next()) {
+                Vocabulary vocabulary = new Vocabulary(resultSet.getInt("id"), resultSet.getString("answer"), resultSet.getString("question"), resultSet.getString("language"), resultSet.getInt("phase"));
+                vocs.add(vocabulary);
             }
-            return new Vocabulary(resultSet.getInt("id"), resultSet.getString("answer"), resultSet.getString("question"), resultSet.getString("language"), resultSet.getInt("phase"));
+            return vocs.get(random.nextInt(vocs.size()));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
