@@ -46,8 +46,10 @@ html(lang='en')
                 div.card-body
                     h1 See the docs
                     p A description of rest calls u can do against this api.
-                    p Get the postman collection:
+                    p Get the postman collection, with it you can see how general requests are done:
                         a(href="/collection.json" download="voc5-collection.json") here
+                    p Get the postman collection with automated tests, with it you can test if you application behaves the way it should:
+                        a(href="/voc5 automated tests.postman_collection.json" download="voc5-collection-automated-tests.json") here
             +tableCall("What the items mean","The Rest request type, something like POST or GET.","Says how to call the method e.g. /voc.", "Description of the call", "What the body of the request looks like" , "What the body of the response looks like", "If there are any query parameters. That are those that are put at the end of an URL e.g. /voc?id=3", "Headers that must be set, btw. the headers email and password need to be set for all calls to /voc*")
             +tableCall(null,"GET","/", "Returns this docs page")
             +tableCall(null,"POST","/register", "Creates a new user and returns according status code depending on if user name already existed and if the register was successful.", "An object with email and password as json. Like that: {\"email\": \"alex@example.de\", \"password\": \"12345678\"}" , null, null)

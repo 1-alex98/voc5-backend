@@ -1,0 +1,628 @@
+{
+  "info": {
+    "_postman_id": "2315c885-c902-451e-9337-22042b090196",
+    "name": "voc5 automated tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register user first time",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "18060e73-7444-4df8-ad68-839a7e90b75c",
+            "exec": [
+              "const random = Math.random();",
+              "pm.globals.set(\"TEST_USER\", \"testPostman\"+random + \"@example.com\");",
+              "pm.globals.set(\"TEST_PASSWORD\", \"\"+Math.random());"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "f04605bb-4292-4c6a-9a3e-6916c47118b1",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Body includes Registered\", function () {",
+              "    pm.expect(pm.response.text().toLowerCase()).to.include(\"registered\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/javascript"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"email\": \"{{TEST_USER}}\",\n\t\"password\": \"{{TEST_PASSWORD}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "javascript"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/register",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "register"
+          ]
+        },
+        "description": "Registers a radom user"
+      },
+      "response": []
+    },
+    {
+      "name": "Login with wrong pw or wrong name",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "18060e73-7444-4df8-ad68-839a7e90b75c",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "f04605bb-4292-4c6a-9a3e-6916c47118b1",
+            "exec": [
+              "pm.test(\"Status code is 401\", function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "email",
+            "value": "test1@example.com",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "APasswordThatIsDefinetlyWrong",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/login",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "description": "Registers a radom user"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Vocabulary",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "71e27638-c177-489c-a2b4-1ae663a98a29",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "email",
+            "value": "{{TEST_USER}}",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "{{TEST_PASSWORD}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"question\": \"hallo\",\n\t\"answer\": \"hello\",\n\t\"language\": \"EN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/voc",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "voc"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login with correct pw",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "18060e73-7444-4df8-ad68-839a7e90b75c",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "f04605bb-4292-4c6a-9a3e-6916c47118b1",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "email",
+            "value": "{{TEST_USER}}",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "{{TEST_PASSWORD}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/login",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "login"
+          ]
+        },
+        "description": "Registers a radom user"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Random vocabulary",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "06837e13-0bf2-49f0-a98f-19894e214d14",
+            "exec": [
+              "pm.test(\"Content-Type header is application/json\", function () {\r",
+              "    const header = pm.response.headers.get(\"Content-Type\");\r",
+              "    pm.expect(header.includes(\"application/json\")).to.be.equal(true);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response json has id\", function () {\r",
+              "    pm.expect(pm.response.json().id).to.not.be.equal(undefined);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"response json has answer and is hello\", function () {\r",
+              "    pm.expect(pm.response.json().answer).to.be.equal(\"hello\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"response json has question and is hallo\", function () {\r",
+              "    pm.expect(pm.response.json().question).to.be.equal(\"hallo\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"response json has language and is EN\", function () {\r",
+              "    pm.expect(pm.response.json().language).to.be.equal(\"EN\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response json has phase and is 1\", function () {\r",
+              "    pm.expect(pm.response.json().phase).to.be.equal(0);\r",
+              "});\r",
+              "\r",
+              "pm.globals.set(\"TEST_ID_CREATED\", pm.response.json().id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "email",
+            "value": "{{TEST_USER}}",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "{{TEST_PASSWORD}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/voc/random",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "voc",
+            "random"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all vocabulary",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "4df1aee5-780c-4b13-b012-0d482471f298",
+            "exec": [
+              "pm.test(\"Content-Type header is application/json\", function () {\r",
+              "    const header = pm.response.headers.get(\"Content-Type\");\r",
+              "    pm.expect(header.includes(\"application/json\")).to.be.equal(true);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response json array has size 1\", function () {\r",
+              "    pm.expect(pm.response.json().length).to.be.equal(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response json has id\", function () {\r",
+              "    pm.expect(pm.response.json()[0].id).to.not.be.equal(undefined);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"response json has answer and is hello\", function () {\r",
+              "    pm.expect(pm.response.json()[0].answer).to.be.equal(\"hello\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"response json has question and is hallo\", function () {\r",
+              "    pm.expect(pm.response.json()[0].question).to.be.equal(\"hallo\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"response json has language and is EN\", function () {\r",
+              "    pm.expect(pm.response.json()[0].language).to.be.equal(\"EN\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response json has phase and is 1\", function () {\r",
+              "    pm.expect(pm.response.json()[0].phase).to.be.equal(0);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "email",
+            "value": "{{TEST_USER}}",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "{{TEST_PASSWORD}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/voc",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "voc"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit vocabulary",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "96411b59-f76a-4963-95fb-cb8adcda7e4d",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "email",
+            "value": "{{TEST_USER}}",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "{{TEST_PASSWORD}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"question\": \"Hallo\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/voc/{{TEST_ID_CREATED}}",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "voc",
+            "{{TEST_ID_CREATED}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Check if vocabulary was edited",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "ca28d769-bc06-4b71-bb8d-868502ecb6f6",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response json has question and is hallo\", function () {\r",
+              "    pm.expect(pm.response.json().question).to.be.equal(\"Hallo\");\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "email",
+            "value": "{{TEST_USER}}",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "{{TEST_PASSWORD}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/voc/random",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "voc",
+            "random"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Vocabulary",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "e31d3a0a-34e6-42ef-b47e-ad314d311b35",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"Response is true\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "email",
+            "type": "text",
+            "value": "{{TEST_USER}}"
+          },
+          {
+            "key": "password",
+            "type": "text",
+            "value": "{{TEST_PASSWORD}}"
+          }
+        ],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/voc/{{TEST_ID_CREATED}}",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "voc",
+            "{{TEST_ID_CREATED}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Check if vocabulary was deleted",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "efc0b8c8-688f-49ea-9779-464aab04092a",
+            "exec": [
+              "pm.test(\"Response array empty\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length).to.eql(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "email",
+            "type": "text",
+            "value": "{{TEST_USER}}"
+          },
+          {
+            "key": "password",
+            "type": "text",
+            "value": "{{TEST_PASSWORD}}"
+          }
+        ],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{HOST_NAME}}/voc",
+          "protocol": "{{PROTOCOL}}",
+          "host": [
+            "{{HOST_NAME}}"
+          ],
+          "path": [
+            "voc"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "58d8f527-1ad7-4d89-8c69-8a33ffece362",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "06ad2423-608b-4171-980e-8c7722cc9ec2",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "d2265e7e-fb37-4519-8b59-f511985510e0",
+      "key": "HOST_NAME",
+      "value": "api.voc5.org",
+      "type": "string"
+    },
+    {
+      "id": "09c557b8-f7f7-44fd-81c8-32aa2cfb5ef5",
+      "key": "PROTOCOL",
+      "value": "https",
+      "type": "string"
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
