@@ -2,6 +2,8 @@ package org.voc5.backend;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.voc5.backend.data.RegisterBody;
 import org.voc5.backend.data.Vocabulary;
 import spark.ModelAndView;
@@ -14,8 +16,9 @@ import java.util.HashMap;
 import static spark.Spark.*;
 
 public class Main {
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public static void main(String[] args) {
         staticFiles.location("/static");
@@ -73,7 +76,12 @@ public class Main {
         String body = request.body();
         RegisterBody registerBody = gson.fromJson(body, RegisterBody.class);
         String passwordHash = BCrypt.withDefaults().hashToString(12, registerBody.getPassword().toCharArray());
-        JDBCWrapper.getInstance().register(registerBody.getEmail(), passwordHash);
+        try {
+            JDBCWrapper.getInstance().register(registerBody.getEmail(), passwordHash);
+        } catch (Exception e) {
+            log.warn("User was not inserted", e);
+            halt(400, "User was not inserted, maybe the user already existed");
+        }
         return "Registered";
     }
 
